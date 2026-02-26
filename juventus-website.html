@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juventus FC – Fino Alla Fine</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --black:     #080808;
+  --white:     #f5f5f0;
+  --gold:      #c9a84c;
+  --gold2:     #e8c96e;
+  --dim:       #161616;
+  --mid:       #252525;
+  --muted:     #666;
+  --border:    rgba(255,255,255,0.08);
+  --font-d:    'Oswald', sans-serif;
+  --font-b:    'Barlow', sans-serif;
+  --ease:      cubic-bezier(0.25,0.46,0.45,0.94);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+ul{list-style:none}
+button{cursor:none;font-family:inherit;border:none;background:none}
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════ */
+#cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s,height 0.3s,background 0.3s}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.12s var(--ease),width 0.3s,height 0.3s,border-color 0.3s}
+body.hover-state #cursor{width:6px;height:6px;background:var(--gold2)}
+body.hover-state #cursor-ring{width:52px;height:52px;border-color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   NOISE TEXTURE OVERLAY
+═══════════════════════════════════════════ */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9997;opacity:0.4
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:72px;
+  display:flex;align-items:center;
+  padding:0 3rem;
+  justify-content:space-between;
+  transition:background 0.4s,backdrop-filter 0.4s;
+}
+header.scrolled{
+  background:rgba(8,8,8,0.96);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+
+.logo{display:flex;align-items:center;gap:1.1rem}
+.logo-hex{
+  width:44px;height:44px;
+  background:linear-gradient(160deg,var(--black) 45%,var(--white) 45%);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--gold);
+  transition:transform 0.4s var(--ease);
+}
+.logo:hover .logo-hex{transform:rotate(30deg) scale(1.1)}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-name{font-family:var(--font-d);font-size:1.15rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+.logo-sub{font-size:0.6rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-top:2px}
+
+nav ul{display:flex;gap:0.2rem}
+nav ul li a{
+  font-family:var(--font-d);font-size:0.78rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(245,245,240,0.65);
+  padding:0.45rem 1rem;
+  position:relative;transition:color 0.3s;
+  display:block;
+}
+nav ul li a::after{
+  content:'';position:absolute;bottom:0;left:1rem;right:1rem;
+  height:1.5px;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.35s var(--ease);
+}
+nav ul li a:hover{color:var(--white)}
+nav ul li a:hover::after{transform:scaleX(1)}
+
+.nav-ticket{
+  font-family:var(--font-d);font-size:0.75rem;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--black);background:var(--gold);
+  padding:0.55rem 1.4rem;
+  clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);
+  transition:background 0.3s,transform 0.3s;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.nav-ticket:hover{background:var(--gold2);transform:translateY(-1px)}
+
+.burger{display:none;flex-direction:column;gap:5px;padding:4px;background:none;border:none}
+.burger span{display:block;width:22px;height:1.5px;background:var(--white);transition:0.3s}
+
+/* ═══════════════════════════════════════════
+   MOBILE NAV
+═══════════════════════════════════════════ */
+.mobile-nav{
+  position:fixed;inset:0;top:72px;background:var(--black);z-index:999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  opacity:0;pointer-events:none;transition:opacity 0.4s;
+}
+.mobile-nav.open{opacity:1;pointer-events:all}
+.mobile-nav a{font-family:var(--font-d);font-size:2.5rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,245,240,0.5);transition:color 0.3s}
+.mobile-nav a:hover{color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Left black half */
+.hero-left{
+  background:var(--black);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 4rem 6rem;
+  position:relative;z-index:2;
+}
+
+/* Right white stripe */
+.hero-right{
+  background:var(--white);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-right::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,
+    transparent 0%,
+    rgba(201,168,76,0.06) 50%,
+    transparent 100%
+  );
+}
+
+/* Diagonal split line with gold */
+.hero::after{
+  content:'';position:absolute;
+  top:0;bottom:0;left:50%;
+  width:4px;
+  background:linear-gradient(to bottom,transparent 0%,var(--gold) 20%,var(--gold) 80%,transparent 100%);
+  transform:skewX(-3deg);
+  z-index:3;
+}
+
+/* Animated stadium silhouette in right panel */
+.hero-stadium-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom, rgba(245,245,240,0) 0%, rgba(245,245,240,0.95) 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(8,8,8,0.04) 60px,
+      rgba(8,8,8,0.04) 61px
+    );
+}
+
+.hero-right-content{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:2rem;
+}
+.hero-big-number{
+  font-family:var(--font-d);
+  font-size:clamp(8rem,18vw,20rem);
+  font-weight:700;
+  line-height:0.85;
+  color:rgba(8,8,8,0.06);
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  letter-spacing:-0.05em;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.hero-right-badge{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:180px;height:180px;
+  background:var(--black);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0.2rem;
+  animation:badgePulse 4s ease-in-out infinite;
+}
+@keyframes badgePulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-50%) scale(1.04)}
+}
+.hero-right-badge span:first-child{font-family:var(--font-d);font-size:3.5rem;font-weight:700;color:var(--gold);line-height:1}
+.hero-right-badge span:last-child{font-family:var(--font-d);font-size:0.65rem;letter-spacing:0.3em;color:rgba(245,245,240,0.5);text-transform:uppercase}
+
+/* Hero left content */
+.hero-tag{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:var(--font-d);font-size:0.7rem;letter-spacing:0.25em;
+  text-transform:uppercase;color:var(--black);background:var(--gold);
+  padding:0.3rem 1rem;margin-bottom:2rem;
+  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
+  animation:slideInLeft 1s var(--ease) 0.3s both;
+}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+
+.hero-title{
+  font-family:var(--font-d);
+  font-size:clamp(3.5rem,7vw,6.5rem);
+  font-weight:700;
+  line-height:0.92;
+  text-transform:uppercase;
+  letter-spacing:-0.01em;
+  margin-bottom:2rem;
+  animation:slideInLeft 1s var(--ease) 0.5s both;
+}
+.hero-title em{
+  display:block;
+  font-style:normal;
+  color:var(--gold);
+  -webkit-text-stroke:1px var(--gold);
+}
+
+.hero-desc{
+  font-size:1rem;color:rgba(245,245,240,0.55);
+  line-height:1.8;max-width:420px;
+  margin-bottom:3rem;
+  animation:slideInLeft 1s var(--ease) 0.7s both;
+}
+
+.hero-actions{
+  display:flex;gap:1.2rem;flex-wrap:wrap;
+  animation:slideInLeft 1s var(--ease) 0.9s both;
+}
+.btn-gold{
+  font-family:var(--font-d);font-size:0.82rem;letter-spacing:0.18em;font-weight:600;
+  text-transform:uppercase;color:var(--black);background:var(--gold);
+  padding:0.9rem 2rem;
+  clip-path:polygon(9px 0%,100% 0%,calc(100% - 9px) 100%,0% 100%);
+  transition:background 0.3s,transform 0.3s,box-shadow 0.3s;
+  display:inline-flex;align-items:center;gap:0.6rem;
+}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 30px rgba(201,168,76,0.25)}
+.btn-outline{
+  font-family:var(--font-d);font-size:0.82rem;letter-spacing:0.18em;font-weight:600;
+  text-transform:uppercase;color:var(--white);
+  padding:0.9rem 2rem;border:1px solid rgba(245,245,240,0.25);
+  transition:border-color 0.3s,color 0.3s;
+  display:inline-flex;align-items:center;gap:0.6rem;
+}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+.hero-stats{
+  position:absolute;right:5%;bottom:5%;
+  display:flex;flex-direction:column;gap:1.5rem;
+  z-index:4;
+  animation:slideInLeft 1s var(--ease) 1.1s both;
+}
+.hero-stat{
+  border-left:2px solid var(--gold);
+  padding-left:1rem;
+}
+.hero-stat strong{display:block;font-family:var(--font-d);font-size:2rem;font-weight:700;color:var(--gold);line-height:1}
+.hero-stat span{display:block;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* Scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  z-index:5;opacity:0.4;
+  animation:bounce 2s ease-in-out infinite;
+}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.scroll-hint span{font-family:var(--font-d);font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase}
+.scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent)}
+
+/* ═══════════════════════════════════════════
+   LIVE TICKER
+═══════════════════════════════════════════ */
+.ticker{background:var(--gold);padding:0.65rem 0;overflow:hidden}
+.ticker-track{
+  display:flex;gap:4rem;white-space:nowrap;
+  animation:ticker 35s linear infinite;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  display:flex;align-items:center;gap:0.75rem;
+  font-family:var(--font-d);font-size:0.78rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--black);font-weight:600;
+}
+.ticker-score{
+  background:var(--black);color:var(--gold);
+  padding:0.15rem 0.5rem;font-weight:700;
+}
+.ticker-dot{color:rgba(0,0,0,0.25);font-size:1.2rem}
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+.section{padding:6rem 0}
+.container{max-width:1380px;margin:0 auto;padding:0 2.5rem}
+.section-label{
+  font-family:var(--font-d);font-size:0.7rem;letter-spacing:0.3em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;display:block;
+}
+.section-heading{
+  font-family:var(--font-d);font-size:clamp(2rem,4.5vw,4rem);
+  font-weight:700;line-height:1.05;text-transform:uppercase;letter-spacing:0.01em;
+  margin-bottom:3rem;
+}
+.section-heading span{color:var(--gold)}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:0.1s}.reveal-d2{transition-delay:0.2s}.reveal-d3{transition-delay:0.3s}.reveal-d4{transition-delay:0.4s}
+
+/* ═══════════════════════════════════════════
+   NEXT MATCH SECTION
+═══════════════════════════════════════════ */
+.matches-section{background:var(--dim)}
+
+.match-banner{
+  border:1px solid var(--border);
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:3rem;
+  padding:3rem 4rem;
+  position:relative;overflow:hidden;
+  background:var(--black);
+}
+.match-banner::before{
+  content:'NEXT MATCH';
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--font-d);font-size:8rem;font-weight:700;letter-spacing:0.1em;
+  color:rgba(255,255,255,0.02);pointer-events:none;white-space:nowrap;
+}
+.match-banner::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,var(--gold),transparent 60%);
+}
+
+.match-team-side{display:flex;align-items:center;gap:1.5rem}
+.match-team-side.right{flex-direction:row-reverse;text-align:right}
+
+.team-logo-circle{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--mid);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:var(--gold);
+  flex-shrink:0;transition:border-color 0.3s;
+}
+.match-team-side:hover .team-logo-circle{border-color:var(--gold)}
+
+.t-name{font-family:var(--font-d);font-size:1.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em}
+.t-city{font-size:0.75rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+
+.match-center-info{text-align:center}
+.vs-text{font-family:var(--font-d);font-size:3rem;font-weight:700;color:var(--gold);display:block;line-height:1}
+.match-date-line{font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin:0.5rem 0}
+.match-competition-pill{
+  display:inline-block;
+  font-family:var(--font-d);font-size:0.65rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(201,168,76,0.3);padding:0.25rem 0.8rem;margin-top:0.3rem;
+}
+
+/* Results Grid */
+.results-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);margin-top:1.5px;
+}
+.result-card{
+  background:var(--black);padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.3s;
+}
+.result-card:hover{background:var(--dim)}
+.result-teams{font-family:var(--font-d);font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase}
+.result-score{font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:var(--gold)}
+.result-meta{font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.result-badge{
+  font-family:var(--font-d);font-size:0.6rem;letter-spacing:0.15em;padding:0.2rem 0.5rem;
+  text-transform:uppercase;
+}
+.win{background:rgba(60,180,100,0.15);color:#4fc87a}
+.draw{background:rgba(201,168,76,0.15);color:var(--gold)}
+.loss{background:rgba(220,60,60,0.15);color:#e05555}
+
+/* ═══════════════════════════════════════════
+   NEWS SECTION
+═══════════════════════════════════════════ */
+.news-section{background:var(--black)}
+
+.news-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  grid-template-rows:auto auto;
+  gap:1.5px;background:var(--border);
+}
+.news-card{background:var(--black);position:relative;overflow:hidden;cursor:none}
+.news-card.featured{grid-row:1/3}
+
+.news-thumb{
+  width:100%;background:var(--mid);overflow:hidden;
+  position:relative;
+}
+.news-card.featured .news-thumb{height:500px}
+.news-card:not(.featured) .news-thumb{height:200px}
+
+.news-thumb-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;transition:transform 0.6s var(--ease);
+  background:linear-gradient(135deg,var(--dim),var(--mid));
+}
+.news-card:hover .news-thumb-inner{transform:scale(1.06)}
+
+.news-card.featured .news-thumb::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,0.9) 0%,transparent 55%);
+}
+.news-card.featured .news-body{
+  position:absolute;bottom:0;left:0;right:0;padding:2.5rem 2rem;
+}
+.news-card:not(.featured) .news-body{padding:1.2rem 1.5rem 1.5rem}
+
+.news-cat{
+  display:inline-block;font-family:var(--font-d);font-size:0.65rem;
+  letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;
+}
+.news-title{
+  font-family:var(--font-d);font-size:1rem;font-weight:700;
+  text-transform:uppercase;line-height:1.3;letter-spacing:0.03em;
+  transition:color 0.3s;
+}
+.news-card.featured .news-title{font-size:clamp(1.3rem,2.5vw,2rem)}
+.news-card:hover .news-title{color:var(--gold)}
+.news-meta{font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;margin-top:0.5rem}
+
+/* Side news list */
+.news-side{display:flex;flex-direction:column;gap:1.5px;background:var(--border)}
+.news-side-item{
+  background:var(--black);padding:1.2rem 1.5rem;
+  display:flex;align-items:flex-start;gap:1rem;
+  transition:background 0.3s;cursor:none;
+}
+.news-side-item:hover{background:var(--dim)}
+.news-side-thumb{
+  width:70px;height:70px;flex-shrink:0;
+  background:var(--mid);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;overflow:hidden;
+}
+.news-side-title{font-family:var(--font-d);font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;line-height:1.3;transition:color 0.3s}
+.news-side-item:hover .news-side-title{color:var(--gold)}
+.news-side-meta{font-size:0.65rem;color:var(--muted);letter-spacing:0.12em;margin-top:4px}
+
+/* ═══════════════════════════════════════════
+   SQUAD SECTION
+═══════════════════════════════════════════ */
+.squad-section{background:var(--dim)}
+
+.squad-tabs{display:flex;gap:0;margin-bottom:3rem;border-bottom:1px solid var(--border)}
+.squad-tab{
+  font-family:var(--font-d);font-size:0.78rem;letter-spacing:0.15em;
+  text-transform:uppercase;padding:0.8rem 1.8rem;
+  color:var(--muted);background:none;
+  border-bottom:2px solid transparent;
+  transition:color 0.3s,border-color 0.3s;
+  cursor:none;
+}
+.squad-tab.active,.squad-tab:hover{color:var(--white)}
+.squad-tab.active{border-bottom-color:var(--gold)}
+
+.squad-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:1.5px;background:var(--border);
+}
+.player-card{
+  background:var(--black);position:relative;overflow:hidden;
+  aspect-ratio:3/4;cursor:none;
+}
+.player-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,0.92) 30%,transparent 65%);
+  z-index:1;transition:opacity 0.4s;
+}
+.player-card:hover::before{opacity:0.7}
+.player-card-bg{
+  width:100%;height:100%;
+  background:linear-gradient(180deg,var(--mid) 0%,var(--black) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:5rem;transition:transform 0.5s var(--ease);
+}
+.player-card:hover .player-card-bg{transform:scale(1.07)}
+.player-num{
+  position:absolute;top:1rem;right:1rem;z-index:2;
+  font-family:var(--font-d);font-size:3rem;font-weight:700;
+  color:rgba(255,255,255,0.07);line-height:1;
+  transition:color 0.4s;
+}
+.player-card:hover .player-num{color:rgba(201,168,76,0.25)}
+.player-info{
+  position:absolute;bottom:0;left:0;right:0;z-index:2;
+  padding:1.2rem;transform:translateY(5px);transition:transform 0.35s var(--ease);
+}
+.player-card:hover .player-info{transform:translateY(0)}
+.player-pos{font-family:var(--font-d);font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.player-name{font-family:var(--font-d);font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+.player-flag{font-size:0.9rem;margin-top:4px}
+
+/* ═══════════════════════════════════════════
+   STADIUM SECTION
+═══════════════════════════════════════════ */
+.stadium-section{
+  position:relative;min-height:90vh;
+  display:flex;align-items:center;
+  overflow:hidden;background:var(--black);
+}
+.stadium-grid-lines{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);
+  background-size:80px 80px;
+  animation:gridShift 20s linear infinite;
+}
+@keyframes gridShift{from{background-position:0 0}to{background-position:80px 80px}}
+
+.stadium-content{position:relative;z-index:1;text-align:center;width:100%}
+.stadium-ring{
+  width:300px;height:300px;
+  border:1px solid rgba(201,168,76,0.2);border-radius:50%;
+  margin:0 auto 3rem;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  animation:ringRotate 30s linear infinite;
+}
+.stadium-ring::before{
+  content:'';position:absolute;
+  width:250px;height:250px;
+  border:1px dashed rgba(201,168,76,0.1);border-radius:50%;
+}
+.stadium-ring-inner{
+  width:180px;height:180px;
+  background:var(--gold);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-weight:700;color:var(--black);
+  animation:ringRotate 30s linear infinite reverse;
+}
+.stadium-ring-inner span:first-child{font-size:2rem;line-height:1}
+.stadium-ring-inner span:last-child{font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;margin-top:3px}
+@keyframes ringRotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.stadium-title{font-family:var(--font-d);font-size:clamp(2.5rem,6vw,5.5rem);font-weight:700;text-transform:uppercase;line-height:1.05;margin-bottom:1rem}
+.stadium-title span{color:var(--gold)}
+.stadium-sub{font-size:1rem;color:rgba(245,245,240,0.5);max-width:540px;margin:0 auto 3rem;line-height:1.8}
+
+.stadium-facts{display:flex;justify-content:center;gap:5rem;flex-wrap:wrap;margin-bottom:3rem}
+.sfact strong{display:block;font-family:var(--font-d);font-size:3rem;font-weight:700;color:var(--gold);line-height:1}
+.sfact em{font-style:normal;display:block;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ═══════════════════════════════════════════
+   SHOP SECTION
+═══════════════════════════════════════════ */
+.shop-section{background:var(--white);color:var(--black)}
+.shop-section .section-label{color:var(--gold)}
+.shop-section .section-heading{color:var(--black)}
+
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5px;background:rgba(0,0,0,0.08);margin-top:3rem}
+.shop-card{background:var(--white);position:relative;overflow:hidden;cursor:none;transition:background 0.3s}
+.shop-card:hover{background:#efefea}
+.shop-img{
+  aspect-ratio:1;background:#e8e8e3;
+  display:flex;align-items:center;justify-content:center;
+  font-size:6rem;overflow:hidden;position:relative;
+  transition:transform 0.5s var(--ease);
+}
+.shop-card:hover .shop-img{transform:scale(1.03)}
+.shop-badge{
+  position:absolute;top:1rem;left:1rem;
+  font-family:var(--font-d);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;
+  background:var(--black);color:var(--gold);padding:0.25rem 0.65rem;
+}
+.shop-info{padding:1.2rem 1.5rem}
+.shop-name{font-family:var(--font-d);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--black)}
+.shop-price{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--gold);margin-top:0.3rem}
+.shop-cta{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:var(--font-d);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--black);border-bottom:1px solid var(--black);
+  padding-bottom:1px;margin-top:0.8rem;
+  transition:color 0.3s,border-color 0.3s;
+}
+.shop-card:hover .shop-cta{color:var(--gold);border-color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   MEMBERS BANNER
+═══════════════════════════════════════════ */
+.members-section{background:var(--black);padding:5rem 0}
+.members-inner{
+  background:linear-gradient(120deg,var(--gold) 0%,#9a6f20 100%);
+  padding:4rem;
+  display:flex;align-items:center;justify-content:space-between;gap:3rem;
+  clip-path:polygon(0 0,100% 0,calc(100% - 40px) 100%,40px 100%);
+  position:relative;overflow:hidden;
+}
+.members-inner::after{
+  content:'';position:absolute;right:-5%;top:-50%;
+  width:60%;height:200%;
+  background:rgba(255,255,255,0.06);
+  transform:skewX(-10deg);
+  pointer-events:none;
+}
+.members-text h2{font-family:var(--font-d);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;text-transform:uppercase;color:var(--black);line-height:1.1}
+.members-text h2 strong{display:block;opacity:0.5;font-size:0.7em}
+.members-text p{color:rgba(8,8,8,0.65);margin-top:0.5rem;font-size:1rem;max-width:480px}
+.btn-dark{
+  flex-shrink:0;
+  font-family:var(--font-d);font-size:0.82rem;letter-spacing:0.2em;font-weight:700;
+  text-transform:uppercase;color:var(--gold);background:var(--black);
+  padding:1rem 2.2rem;
+  clip-path:polygon(9px 0%,100% 0%,calc(100% - 9px) 100%,0% 100%);
+  transition:background 0.3s,transform 0.3s;
+  display:inline-flex;align-items:center;gap:0.6rem;
+}
+.btn-dark:hover{background:#111;transform:translateY(-2px)}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:#040404;border-top:1px solid var(--border);padding:4rem 0 2rem}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
+.footer-brand .logo{margin-bottom:1.5rem}
+.footer-brand p{font-size:0.85rem;color:var(--muted);line-height:1.9;max-width:300px}
+.social-row{display:flex;gap:0.6rem;margin-top:1.5rem}
+.soc{
+  width:36px;height:36px;background:var(--mid);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:0.6rem;letter-spacing:0.08em;
+  color:var(--muted);transition:background 0.3s,color 0.3s;
+}
+.soc:hover{background:var(--gold);color:var(--black)}
+.footer-col h4{font-family:var(--font-d);font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.footer-col ul li{margin-bottom:0.5rem}
+.footer-col ul li a{font-size:0.85rem;color:var(--muted);transition:color 0.3s,padding-left 0.3s}
+.footer-col ul li a:hover{color:var(--white);padding-left:6px}
+
+.footer-bottom{padding-top:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:0.78rem;color:var(--muted)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:0.78rem;color:var(--muted);transition:color 0.3s}
+.footer-links a:hover{color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   SCROLL-TO-TOP
+═══════════════════════════════════════════ */
+#back-top{
+  position:fixed;bottom:2rem;right:2rem;z-index:990;
+  width:44px;height:44px;background:var(--gold);
+  clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:var(--black);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s,transform 0.3s;
+  cursor:none;
+}
+#back-top.show{opacity:1;pointer-events:all}
+#back-top:hover{transform:translateY(-3px);background:var(--gold2)}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .hero::after{display:none}
+  .hero-left{min-height:100vh;padding-bottom:8rem;background:radial-gradient(ellipse at 70% 30%,rgba(201,168,76,0.06) 0%,transparent 60%),var(--black)}
+  .hero-stats{position:static;flex-direction:row;margin-top:3rem;flex-wrap:wrap}
+
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  nav{display:none}
+  .nav-ticket{display:none}
+  .burger{display:flex}
+  header{padding:0 1.5rem}
+
+  .results-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr}
+  .news-card.featured{grid-row:auto}
+  .match-banner{grid-template-columns:1fr;text-align:center;padding:2rem}
+  .match-team-side,.match-team-side.right{flex-direction:column}
+
+  .members-inner{flex-direction:column;clip-path:none;text-align:center}
+  .footer-top{grid-template-columns:1fr;gap:2rem}
+}
+@media(max-width:580px){
+  .squad-grid{grid-template-columns:repeat(2,1fr)}
+  .stadium-facts{gap:2rem}
+  .container{padding:0 1.2rem}
+  .section{padding:4rem 0}
+  .hero-left{padding:0 1.5rem 7rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ═══════ HEADER ═══════ -->
+<header id="header">
+  <a href="#" class="logo">
+    <div class="logo-hex">J</div>
+    <div class="logo-text">
+      <span class="logo-name">Juventus FC</span>
+      <span class="logo-sub">Dal 1897</span>
+    </div>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="#news">News</a></li>
+      <li><a href="#matches">Spiele</a></li>
+      <li><a href="#squad">Kader</a></li>
+      <li><a href="#stadium">Stadion</a></li>
+      <li><a href="#shop">Shop</a></li>
+    </ul>
+  </nav>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <a href="#" class="nav-ticket">🎟 Tickets</a>
+    <button class="burger" id="burger" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#news" onclick="closeMobileNav()">News</a>
+  <a href="#matches" onclick="closeMobileNav()">Spiele</a>
+  <a href="#squad" onclick="closeMobileNav()">Kader</a>
+  <a href="#stadium" onclick="closeMobileNav()">Stadion</a>
+  <a href="#shop" onclick="closeMobileNav()">Shop</a>
+  <a href="#" class="btn-gold" style="margin-top:1rem">🎟 Tickets</a>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">⚽ Saison 2024/25</div>
+    <h1 class="hero-title">
+      FINO<br>ALLA<br><em>FINE</em>
+    </h1>
+    <p class="hero-desc">Willkommen beim traditionsreichsten Club Italiens. Leidenschaft, Geschichte und unerschütterliche Entschlossenheit – das ist Juventus.</p>
+    <div class="hero-actions">
+      <a href="#news" class="btn-gold">Aktuelles ↗</a>
+      <a href="#squad" class="btn-outline">Kader ansehen →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>36</strong><span>Scudetti</span></div>
+      <div class="hero-stat"><strong>2x</strong><span>Champions League</span></div>
+      <div class="hero-stat"><strong>1897</strong><span>Gegründet</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stadium-bg"></div>
+    <div class="hero-big-number">JUV</div>
+    <div class="hero-right-badge">
+      <span>J</span>
+      <span>Torino, IT</span>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scrollen</span></div>
+</section>
+
+<!-- ═══════ LIVE TICKER ═══════ -->
+<div class="ticker" aria-label="Letzte Ergebnisse">
+  <div class="ticker-track">
+    <!-- First set -->
+    <div class="ticker-item">Serie A · Juventus <span class="ticker-score">3–1</span> Lazio</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Serie A · Milan <span class="ticker-score">0–2</span> Juventus</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Champions League · Juventus <span class="ticker-score">2–2</span> Benfica</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Coppa Italia · Juventus <span class="ticker-score">4–0</span> Frosinone</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Serie A · Napoli <span class="ticker-score">1–3</span> Juventus</div>
+    <span class="ticker-dot">◆</span>
+    <!-- Duplicate for seamless loop -->
+    <div class="ticker-item">Serie A · Juventus <span class="ticker-score">3–1</span> Lazio</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Serie A · Milan <span class="ticker-score">0–2</span> Juventus</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Champions League · Juventus <span class="ticker-score">2–2</span> Benfica</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Coppa Italia · Juventus <span class="ticker-score">4–0</span> Frosinone</div>
+    <span class="ticker-dot">◆</span>
+    <div class="ticker-item">Serie A · Napoli <span class="ticker-score">1–3</span> Juventus</div>
+    <span class="ticker-dot">◆</span>
+  </div>
+</div>
+
+<!-- ═══════ MATCHES ═══════ -->
+<section class="matches-section section" id="matches">
+  <div class="container">
+    <span class="section-label reveal">Spielplan</span>
+    <h2 class="section-heading reveal reveal-d1">Nächstes <span>Spiel</span></h2>
+
+    <div class="match-banner reveal reveal-d2">
+      <div class="match-team-side">
+        <div class="team-logo-circle">JUV</div>
+        <div>
+          <div class="t-name">Juventus</div>
+          <div class="t-city">Torino, Italia</div>
+        </div>
+      </div>
+      <div class="match-center-info">
+        <span class="vs-text">VS</span>
+        <div class="match-date-line">Sa, 01. März 2025 · 20:45 Uhr</div>
+        <span class="match-competition-pill">Serie A · 27. Spieltag</span>
+        <div style="margin-top:1.5rem">
+          <a href="#" class="btn-gold">🎟 Ticket kaufen</a>
+        </div>
+      </div>
+      <div class="match-team-side right">
+        <div class="team-logo-circle">INT</div>
+        <div>
+          <div class="t-name">Inter</div>
+          <div class="t-city">Milano, Italia</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-grid reveal reveal-d3">
+      <div class="result-card">
+        <div>
+          <div class="result-teams">Juventus vs Lazio</div>
+          <div class="result-meta">Serie A · 22. Feb</div>
+        </div>
+        <div style="text-align:right">
+          <div class="result-score">3 – 1</div>
+          <span class="result-badge win">Sieg</span>
+        </div>
+      </div>
+      <div class="result-card">
+        <div>
+          <div class="result-teams">Milan vs Juventus</div>
+          <div class="result-meta">Serie A · 15. Feb</div>
+        </div>
+        <div style="text-align:right">
+          <div class="result-score">0 – 2</div>
+          <span class="result-badge win">Sieg</span>
+        </div>
+      </div>
+      <div class="result-card">
+        <div>
+          <div class="result-teams">Juventus vs Benfica</div>
+          <div class="result-meta">UCL · 12. Feb</div>
+        </div>
+        <div style="text-align:right">
+          <div class="result-score">2 – 2</div>
+          <span class="result-badge draw">Unentschieden</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ NEWS ═══════ -->
+<section class="news-section section" id="news">
+  <div class="container">
+    <span class="section-label reveal">Aktuell</span>
+    <h2 class="section-heading reveal reveal-d1">Neueste <span>News</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5px;background:var(--border)" class="reveal reveal-d2">
+      <div class="news-grid">
+        <div class="news-card featured">
+          <div class="news-thumb">
+            <div class="news-thumb-inner">⚽</div>
+          </div>
+          <div class="news-body">
+            <span class="news-cat">Match Report</span>
+            <div class="news-title">Dominant-Auftritt: Juventus schlägt Lazio mit 3:1 und bleibt an der Tabellenspitze</div>
+            <div class="news-meta">22. Februar 2025</div>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-thumb"><div class="news-thumb-inner">🏆</div></div>
+          <div class="news-body">
+            <span class="news-cat">Champions League</span>
+            <div class="news-title">Unentschieden in Lissabon – Juventus bleibt im Rennen</div>
+            <div class="news-meta">12. Februar 2025</div>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-thumb"><div class="news-thumb-inner">🔥</div></div>
+          <div class="news-body">
+            <span class="news-cat">Transfer</span>
+            <div class="news-title">Offizielle Verpflichtung: Neuer Mittelfeldspieler unterzeichnet bis 2028</div>
+            <div class="news-meta">8. Februar 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="news-side">
+        <div class="news-side-item">
+          <div class="news-side-thumb">👟</div>
+          <div>
+            <div class="news-side-title">Neues Auswärtstrikot für 2025/26 enthüllt</div>
+            <div class="news-side-meta">Shop · 20. Feb</div>
+          </div>
+        </div>
+        <div class="news-side-item">
+          <div class="news-side-thumb">🎙️</div>
+          <div>
+            <div class="news-side-title">Pressekonferenz vor dem Derby della Mole</div>
+            <div class="news-side-meta">Klub · 19. Feb</div>
+          </div>
+        </div>
+        <div class="news-side-item">
+          <div class="news-side-thumb">📊</div>
+          <div>
+            <div class="news-side-title">Statistiken: Beste Verteidigung der Liga nach 26 Spieltagen</div>
+            <div class="news-side-meta">Analyse · 17. Feb</div>
+          </div>
+        </div>
+        <div class="news-side-item">
+          <div class="news-side-thumb">🏟️</div>
+          <div>
+            <div class="news-side-title">Allianz Stadium: Kapazität wird auf 45.000 erhöht</div>
+            <div class="news-side-meta">Klub · 14. Feb</div>
+          </div>
+        </div>
+        <div class="news-side-item">
+          <div class="news-side-thumb">🌍</div>
+          <div>
+            <div class="news-side-title">Internationale Fans: Juventus Academy startet in Österreich</div>
+            <div class="news-side-meta">Academy · 10. Feb</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SQUAD ═══════ -->
+<section class="squad-section section" id="squad">
+  <div class="container">
+    <span class="section-label reveal">2024/25</span>
+    <h2 class="section-heading reveal reveal-d1">Der <span>Kader</span></h2>
+    <div class="squad-tabs reveal reveal-d2">
+      <button class="squad-tab active" onclick="filterSquad('all',this)">Alle</button>
+      <button class="squad-tab" onclick="filterSquad('torhueter',this)">Torhüter</button>
+      <button class="squad-tab" onclick="filterSquad('verteidiger',this)">Abwehr</button>
+      <button class="squad-tab" onclick="filterSquad('mittelfeld',this)">Mittelfeld</button>
+      <button class="squad-tab" onclick="filterSquad('stuermer',this)">Sturm</button>
+    </div>
+    <div class="squad-grid reveal reveal-d3" id="squad-grid">
+      <!-- Players rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ STADIUM ═══════ -->
+<section class="stadium-section" id="stadium">
+  <div class="stadium-grid-lines"></div>
+  <div class="container stadium-content">
+    <div class="stadium-ring reveal">
+      <div class="stadium-ring-inner">
+        <span>1897</span>
+        <span>Seit</span>
+      </div>
+    </div>
+    <h2 class="stadium-title reveal reveal-d1">Allianz <span>Stadium</span></h2>
+    <p class="stadium-sub reveal reveal-d2">Die Heimstätte der Alten Dame. Ein modernes Fußballtempel, gebaut für Champions – mitten in Torino, mitten im Herzen der Fans.</p>
+    <div class="stadium-facts reveal reveal-d3">
+      <div class="sfact"><strong>41.507</strong><em>Plätze</em></div>
+      <div class="sfact"><strong>2011</strong><em>Eröffnet</em></div>
+      <div class="sfact"><strong>100%</strong><em>Auslastung</em></div>
+      <div class="sfact"><strong>Turin</strong><em>Standort</em></div>
+    </div>
+    <div class="reveal reveal-d4">
+      <a href="#" class="btn-gold">🏟 Stadion-Tour buchen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SHOP ═══════ -->
+<section class="shop-section section" id="shop">
+  <div class="container">
+    <span class="section-label reveal">Official Merchandising</span>
+    <h2 class="section-heading reveal reveal-d1">Juventus <span>Shop</span></h2>
+    <div class="shop-grid">
+      <div class="shop-card reveal reveal-d1">
+        <div class="shop-img">
+          👕
+          <span class="shop-badge">Neu</span>
+        </div>
+        <div class="shop-info">
+          <div class="shop-name">Heimtrikot 2024/25</div>
+          <div class="shop-price">€ 89,95</div>
+          <div class="shop-cta">Jetzt kaufen →</div>
+        </div>
+      </div>
+      <div class="shop-card reveal reveal-d2">
+        <div class="shop-img">
+          🧢
+          <span class="shop-badge">Bestseller</span>
+        </div>
+        <div class="shop-info">
+          <div class="shop-name">Snapback Cap Bianconeri</div>
+          <div class="shop-price">€ 29,95</div>
+          <div class="shop-cta">Jetzt kaufen →</div>
+        </div>
+      </div>
+      <div class="shop-card reveal reveal-d3">
+        <div class="shop-img">👟</div>
+        <div class="shop-info">
+          <div class="shop-name">Auswärtstrikot 2024/25</div>
+          <div class="shop-price">€ 89,95</div>
+          <div class="shop-cta">Jetzt kaufen →</div>
+        </div>
+      </div>
+      <div class="shop-card reveal reveal-d4">
+        <div class="shop-img">
+          🧣
+          <span class="shop-badge">Limited</span>
+        </div>
+        <div class="shop-info">
+          <div class="shop-name">Schal Heritage Edition</div>
+          <div class="shop-price">€ 24,95</div>
+          <div class="shop-cta">Jetzt kaufen →</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem" class="reveal">
+      <a href="#" class="btn-gold" style="background:var(--black);color:var(--gold);border:1.5px solid var(--gold)">Gesamtes Sortiment →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ MEMBERS ═══════ -->
+<section class="members-section">
+  <div class="container">
+    <div class="members-inner reveal">
+      <div class="members-text">
+        <h2><strong>Werde Teil der Familie</strong>Juventus Membership 2025</h2>
+        <p>Exklusive Vorteile, Frühbucherrabatte auf Tickets, Member-Only-Events und das Gefühl, dazuzugehören.</p>
+      </div>
+      <a href="#" class="btn-dark">Jetzt Mitglied werden ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-hex">J</div>
+          <div class="logo-text">
+            <span class="logo-name">Juventus FC</span>
+            <span class="logo-sub">Dal 1897</span>
+          </div>
+        </a>
+        <p>Der traditionsreichste Fußballclub Italiens – elf Meistertitel in Folge, zwei Champions-League-Titel, ein ungebrochener Wille zum Sieg.</p>
+        <div class="social-row">
+          <a href="#" class="soc">IG</a>
+          <a href="#" class="soc">X</a>
+          <a href="#" class="soc">FB</a>
+          <a href="#" class="soc">YT</a>
+          <a href="#" class="soc">TK</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Club</h4>
+        <ul>
+          <li><a href="#">Geschichte</a></li>
+          <li><a href="#">Management</a></li>
+          <li><a href="#">Allianz Stadium</a></li>
+          <li><a href="#">Museum & Tour</a></li>
+          <li><a href="#">Juventus Academy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Fußball</h4>
+        <ul>
+          <li><a href="#">Spielplan</a></li>
+          <li><a href="#">Ergebnisse</a></li>
+          <li><a href="#">Kader</a></li>
+          <li><a href="#">Statistiken</a></li>
+          <li><a href="#">Frauen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Service</h4>
+        <ul>
+          <li><a href="#">Official Shop</a></li>
+          <li><a href="#">Tickets</a></li>
+          <li><a href="#">Membership</a></li>
+          <li><a href="#">Kontakt</a></li>
+          <li><a href="#">Presse</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Juventus FC. Alle Rechte vorbehalten. — Fan-Projekt, nicht offiziell affiliiert.</p>
+      <div class="footer-links">
+        <a href="#">Datenschutz</a>
+        <a href="#">Impressum</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Nach oben">↑</button>
+
+<script>
+/* ══════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════ */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx = -100, my = -100, rx = -100, ry = -100;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function animCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+  ring.style.left   = rx + 'px';
+  ring.style.top    = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('a,button,.news-card,.player-card,.shop-card,.news-side-item,.result-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hover-state'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hover-state'));
+});
+
+/* ══════════════════════════════════
+   HEADER SCROLL
+══════════════════════════════════ */
+const header  = document.getElementById('header');
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', scrollY > 60);
+  backTop.classList.toggle('show', scrollY > 400);
+});
+
+/* ══════════════════════════════════
+   MOBILE NAV
+══════════════════════════════════ */
+const burger    = document.getElementById('burger');
+const mobileNav = document.getElementById('mobile-nav');
+let navOpen = false;
+
+burger.addEventListener('click', () => {
+  navOpen = !navOpen;
+  mobileNav.classList.toggle('open', navOpen);
+  const spans = burger.querySelectorAll('span');
+  if (navOpen) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity   = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }
+});
+
+function closeMobileNav() {
+  navOpen = false;
+  mobileNav.classList.remove('open');
+  burger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+}
+
+/* ══════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ══════════════════════════════════
+   SQUAD DATA + RENDER
+══════════════════════════════════ */
+const players = [
+  { name:'W. Szczęsny',  num:'1',  pos:'Torhüter',    cat:'torhueter',   flag:'🇵🇱', emoji:'🧤' },
+  { name:'P. Montero',   num:'3',  pos:'Verteidiger',  cat:'verteidiger', flag:'🇺🇾', emoji:'🛡️' },
+  { name:'L. Bonucci',   num:'19', pos:'Verteidiger',  cat:'verteidiger', flag:'🇮🇹', emoji:'🛡️' },
+  { name:'D. Rugani',    num:'24', pos:'Verteidiger',  cat:'verteidiger', flag:'🇮🇹', emoji:'🛡️' },
+  { name:'A. Sandro',    num:'12', pos:'Linksaußen-V', cat:'verteidiger', flag:'🇧🇷', emoji:'🛡️' },
+  { name:'M. De Ligt',   num:'4',  pos:'Verteidiger',  cat:'verteidiger', flag:'🇳🇱', emoji:'🛡️' },
+  { name:'A. Rabiot',    num:'25', pos:'Mittelfeld',   cat:'mittelfeld',  flag:'🇫🇷', emoji:'⚙️' },
+  { name:'M. Locatelli', num:'5',  pos:'Mittelfeld',   cat:'mittelfeld',  flag:'🇮🇹', emoji:'⚙️' },
+  { name:'W. McKennie',  num:'14', pos:'Mittelfeld',   cat:'mittelfeld',  flag:'🇺🇸', emoji:'⚙️' },
+  { name:'F. Chiesa',    num:'7',  pos:'Mittelfeld',   cat:'mittelfeld',  flag:'🇮🇹', emoji:'⚡' },
+  { name:'D. Vlahović',  num:'9',  pos:'Stürmer',      cat:'stuermer',    flag:'🇷🇸', emoji:'⚽' },
+  { name:'M. Kean',      num:'18', pos:'Stürmer',      cat:'stuermer',    flag:'🇮🇹', emoji:'⚽' },
+];
+
+function renderPlayers(filter) {
+  const grid = document.getElementById('squad-grid');
+  const list = filter === 'all' ? players : players.filter(p => p.cat === filter);
+  grid.innerHTML = list.map(p => `
+    <div class="player-card">
+      <div class="player-card-bg">${p.emoji}</div>
+      <div class="player-num">${p.num}</div>
+      <div class="player-info">
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-name">${p.name}</div>
+        <div class="player-flag">${p.flag}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Re-add hover cursor events
+  grid.querySelectorAll('.player-card').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hover-state'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hover-state'));
+  });
+}
+
+function filterSquad(cat, btn) {
+  document.querySelectorAll('.squad-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPlayers(cat);
+}
+
+renderPlayers('all');
+
+/* ══════════════════════════════════
+   ANIMATED COUNTERS
+══════════════════════════════════ */
+function animateCounter(el, target, duration = 1800) {
+  const start = performance.now();
+  const update = (time) => {
+    const progress = Math.min((time - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(ease * target);
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target.toLocaleString('de-DE');
+  };
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-count]').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.count));
+      });
+      counterObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.stadium-facts').forEach(el => counterObserver.observe(el));
+</script>
+</body>
+</html>
